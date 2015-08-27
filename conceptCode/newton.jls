@@ -1,0 +1,33 @@
+var math = import("math");
+var test = import("test");
+
+var newton = func(f, df, start, tol, maxIter) {
+  var x = start;
+  var iter = 0;
+
+  while (true) {
+    var last = x;
+    x -= f(x) / df(x);
+    iter++;
+
+    if (math.abs(last - x) < tol) {
+      return x;
+    } else if (iter >= maxIter) {
+      return nil;
+    }
+  }
+};
+
+test({
+  var aboutSqrt2 = newton(
+    $ * $ - 2,
+    2 * $,
+    2,
+    1e-10,
+    100
+  );
+
+  return math.abs(aboutSqrt2 - math.sqrt(2)) < 1e-8;
+});
+
+return newton;

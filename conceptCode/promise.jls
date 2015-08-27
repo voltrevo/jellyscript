@@ -1,0 +1,53 @@
+var post = import('post');
+
+var promise ~ {};
+
+promise.create ~ func(setup) {
+  var p ~ {};
+
+  var resolved = false;
+  var value = nil;
+
+  var handlers = [];
+
+  p.then ~ func(handler) {
+    if (resolved) {
+      post({ handler(value); })
+    } else {
+      handlers.push(handler);
+    }
+
+    return p;
+  };
+
+  setup(func(v) {
+    resolved ~ true;
+    value ~ v;
+
+    post({
+      handlers.each($(v));
+      handlers ~ nil;
+    });
+  });
+
+  return p;
+};
+
+promise.all ~ func(promises) {
+  return promise.create(func(resolve) {
+    var value ~ promises.map({ nil });
+    var promisesRemaining = promises.length();
+
+    promises.each(func(p, i) {
+      p.then(func(v) {
+        value[i] ~ v;
+
+        if (--promisesRemaining == 0) {
+          resolve(value);
+        }
+      })
+    });
+  });
+};
+
+return ~promise;
