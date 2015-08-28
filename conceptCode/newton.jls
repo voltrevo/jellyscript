@@ -5,7 +5,7 @@ var newton = func(f, df, start, tol, maxIter) {
   var x ~ start;
   var iter ~ 0;
 
-  while (true) {
+  for {
     var last = x;
     x -~ f(x) / df(x);
     iter++;
