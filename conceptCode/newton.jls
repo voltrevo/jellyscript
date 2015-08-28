@@ -18,10 +18,10 @@ var newton = func(f, df, start, tol, maxIter) {
   }
 };
 
-test({
+test(func {
   var aboutSqrt2 = newton(
-    $ * $ - 2,
-    2 * $,
+    func(x) => x * x - 2,
+    func(x) => 2 * x,
     2,
     1e-10,
     100
