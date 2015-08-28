@@ -2,12 +2,12 @@ var math = import("math");
 var test = import("test");
 
 var newton = func(f, df, start, tol, maxIter) {
-  var x = start;
-  var iter = 0;
+  var x ~ start;
+  var iter ~ 0;
 
   while (true) {
     var last = x;
-    x -= f(x) / df(x);
+    x -~ f(x) / df(x);
     iter++;
 
     if (math.abs(last - x) < tol) {
