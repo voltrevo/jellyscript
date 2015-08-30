@@ -17,7 +17,7 @@ var once = func(f, extraCallValue) {
 };
 
 mutex.create = func(resource) {
-  var self ~ {};
+  var self = {};
 
   var impl ~ {};
   self.impl = impl;
