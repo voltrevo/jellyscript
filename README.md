@@ -4,7 +4,7 @@ A scripting language that's a lot like javascript, but stripped down, much stric
 
 ## Status
 
-Concept code only.
+Concept code, and a not yet functioning WIP parser.
 
 ## Javascript Differences
 
