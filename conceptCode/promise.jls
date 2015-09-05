@@ -1,14 +1,14 @@
-var post = import('post');
+post = import('post');
 
-var promise = {};
+promise = {};
 
 promise.create = func(setup) {
-  var p = {};
+  p = {};
 
-  var resolved ~ false;
-  var value ~ nil;
+  resolved = false;
+  value = nil;
 
-  var handlers ~ [];
+  handlers = [];
 
   p.then = func(handler) {
     if (resolved) {
@@ -21,12 +21,12 @@ promise.create = func(setup) {
   };
 
   setup(func(v) {
-    resolved = true;
-    value = v;
+    resolved ~ true;
+    value ~ v;
 
     post(func {
       handlers.each(func(handler) { handler(v); });
-      handlers = nil;
+      handlers ~ nil;
     });
   });
 
@@ -35,12 +35,12 @@ promise.create = func(setup) {
 
 promise.all = func(promises) {
   return promise.create(func(resolve) {
-    var value = promises.map(func => nil);
-    var promisesRemaining ~ promises.length();
+    value = promises.map(func => nil);
+    promisesRemaining = promises.length();
 
     promises.each(func(p, i) {
       p.then(func(v) {
-        value[i] = v;
+        value[i] ~ v;
 
         if (--promisesRemaining == 0) {
           resolve(value);

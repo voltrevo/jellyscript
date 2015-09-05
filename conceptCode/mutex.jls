@@ -1,14 +1,14 @@
-var apply = import("apply");
-var promise = import("promise");
+apply = import("apply");
+promise = import("promise");
 
-var mutex ~ {};
+mutex = {};
 
-var once = func(f, extraCallValue) {
-  var called ~ false;
+once = func(f, extraCallValue) {
+  called = false;
 
   return func(args...) {
     if (!called) {
-      called = true;
+      called ~ true;
       return apply(f, args);
     }
 
@@ -17,13 +17,13 @@ var once = func(f, extraCallValue) {
 };
 
 mutex.create = func(resource) {
-  var self = {};
+  self = {};
 
-  var impl ~ {};
+  impl = {};
   self.impl = impl;
 
   impl.resource = resource;
-  impl.locked ~ false;
+  impl.locked = false;
   impl.lockQueue = [];
 
   self.isLocked = func() {
@@ -46,11 +46,11 @@ mutex.create = func(resource) {
 
   self.tryLock = func => (impl.locked ? nil : impl.createLock());
 
-  self.lock = func(condition) {
-    condition = condition || func => true;
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
 
     return promise.create(func(resolve, reject) {
-      var client = {
+      client = {
         condition: condition,
         resolve: resolve,
         reject: reject
@@ -66,7 +66,7 @@ mutex.create = func(resource) {
 
   impl.tryClient = func(client) {
     impl.locked ~ true;
-    var accepted = client.condition();
+    accepted = client.condition();
     impl.locked ~ false;
 
     if (accepted) {
@@ -79,7 +79,7 @@ mutex.create = func(resource) {
   };
 
   impl.runQueue = func() {
-    var accepted ~ false;
+    accepted = false;
 
     while (impl.lockQueue.length > 0 && accepted == false) {
       accepted ~ impl.tryClient(impl.lockQueue.shift());
@@ -90,9 +90,9 @@ mutex.create = func(resource) {
 };
 
 mutex.empty = func {
-  var self = {};
+  self = {};
 
-  var impl = {};
+  impl = {};
   self.impl = impl;
 
   impl.createLock = func {
@@ -105,8 +105,8 @@ mutex.empty = func {
   self.isLocked = func => false;
   self.tryLock = func => impl.createLock();
 
-  self.lock = func(condition) {
-    condition = condition || func => true;
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
 
     return (
       condition() ?
@@ -119,16 +119,16 @@ mutex.empty = func {
 }();
 
 mutex.and = func(mutexes) {
-  var self = {};
+  self = {};
 
-  var impl = {};
+  impl = {};
   self.impl = impl;
 
   impl.mutexes = mutexes;
   impl.internalLocks = 0;
 
   self.isLocked = func {
-    return impl.internalLocks === 0 && impl.mutexes.some(func(m) => m.isLocked());
+    return impl.internalLocks == 0 && impl.mutexes.some(func(m) => m.isLocked());
   };
 
   impl.combineLocks = func(locks) {
@@ -152,8 +152,8 @@ mutex.and = func(mutexes) {
     return impl.createLock();
   };
 
-  self.lock = func(condition) {
-    condition = condition || func() { return true };
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
 
     impl.internalLocks++;
 
@@ -162,12 +162,12 @@ mutex.and = func(mutexes) {
         resolve(impl.createLock());
       }
 
-      var currMutexIndex ~ 0;
-      var locks ~ nil;
-      var conditionFailed ~ false;
+      currMutexIndex = 0;
+      locks = nil;
+      conditionFailed = false;
 
-      var tryCurrMutex = func {
-        var currMutex = impl.mutexes[currMutexIndex];
+      tryCurrMutex = func {
+        currMutex = impl.mutexes[currMutexIndex];
 
         currMutex.lock(func {
           if (!impl.mutexes.some(func(m) => m !== currMutex && m.isLocked())) {
@@ -181,7 +181,7 @@ mutex.and = func(mutexes) {
 
           return false;
         }).then(func(lock) {
-          locks[currMutexIndex] = lock;
+          locks[currMutexIndex] ~ lock;
           resolve(impl.combineLocks(locks));
         }).catch(func() {
           if (conditionFailed) {
@@ -206,13 +206,13 @@ mutex.and = func(mutexes) {
 };
 
 mutex.or = func(mutexes) {
-  var self ~ {};
+  self = {};
 
-  var impl ~ {};
+  impl = {};
   self.impl = impl;
 
   impl.mutexes = mutexes;
-  impl.internalLocks ~ 0;
+  impl.internalLocks = 0;
 
   self.isLocked = func => (
     impl.internalLocks !== 0 ||
@@ -224,8 +224,8 @@ mutex.or = func(mutexes) {
       return nil;
     }
 
-    for (var i = 0; i != impl.mutexes.length; i++) {
-      var m = impl.mutexes[i];
+    for (i = 0; i != impl.mutexes.length; i++) {
+      m = impl.mutexes[i];
 
       if (!m.isLocked()) {
         return m.tryLock();
@@ -235,8 +235,8 @@ mutex.or = func(mutexes) {
     return nil;
   };
 
-  self.lock = func(condition) {
-    condition ~ condition || func => true;
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
 
     impl.internalLocks++;
 
@@ -250,11 +250,11 @@ mutex.or = func(mutexes) {
       }
     }
 
-    condition = once(condition, false);
+    conditionOnce ~ once(condition, false);
 
     return Promise.race(
       impl.mutexes.map(func(m) {
-        return m.lock(condition);
+        return m.lock(conditionOnce);
       })
     ).then(func(lock) {
       impl.internalLocks--;

@@ -1,12 +1,12 @@
-var math = import("math");
-var test = import("test");
+math = import("math");
+test = import("test");
 
-var newton = func(f, df, start, tol, maxIter) {
-  var x ~ start;
-  var iter ~ 0;
+newton = func(f, df, start, tol, maxIter) {
+  x = start;
+  iter = 0;
 
   for {
-    var last = x;
+    last = x;
     x -~ f(x) / df(x);
     iter++;
 
@@ -19,7 +19,7 @@ var newton = func(f, df, start, tol, maxIter) {
 };
 
 test(func {
-  var aboutSqrt2 = newton(
+  aboutSqrt2 = newton(
     func(x) => x * x - 2,
     func(x) => 2 * x,
     2,
