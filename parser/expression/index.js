@@ -8,5 +8,13 @@ var precedenceGrouper = require('./precedenceGrouper.js');
 
 module.exports = parser.transform(
   rawExpression,
-  precedenceGrouper(operators.groups)
+  function(tokens) {
+    return precedenceGrouper(
+      operators.groups,
+      tokens,
+      function(token) {
+        return token.type && token.type === 'operator-token';
+      }
+    );
+  }
 );
