@@ -2,7 +2,9 @@
 
 var parser = require('parser');
 
-var expression = require('./expression.js');
+var controlStructure = require('./controlStructure.js');
+var expression = require('./expression');
+var returnStatement = require('./returnStatement.js');
 var semicolon = require('./semicolon.js');
 
 module.exports = parser.labelledOr(
