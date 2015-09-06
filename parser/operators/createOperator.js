@@ -8,8 +8,16 @@ module.exports = function(name, str, arity, associativity) {
 
   return {
     name: name,
-    consumer: parser.string(str),
+    consumer: parser.transform(
+      parser.string(str),
+      function() {
+        return {
+          type: 'operator-token',
+          name: name
+        };
+      }
+    ),
     arity: arity,
     associativity: associativity
-  }
+  };
 };

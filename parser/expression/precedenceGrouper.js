@@ -1,5 +1,7 @@
 'use strict';
 
+var assert = require('assert');
+
 var arrayView = function(arr) {
   return {
     get: function(n) { return arr[n]; },
@@ -12,17 +14,6 @@ var reverse = function(arrView) {
     get: function(n) { return arrView.get(arrView.length() - n - 1); },
     length: arrView.length
   };
-};
-
-var toArray = function(arrView) {
-  var result = [];
-  var length = arrView.length();
-
-  for (var i = 0; i !== length; i++) {
-    result.push(arrView.get(i));
-  }
-
-  return result;
 };
 
 var unaryPass = function(opTest, valTest, makeOp, sequence) {
@@ -72,26 +63,63 @@ var binaryPass = function(opTest, valTest, makeOp, sequence) {
   return result;
 };
 
-module.exports = function(operatorGroups, tokens) {
+module.exports = function(operatorGroups, tokens, opTest) {
+  var valTest = function(token) {
+    return !opTest(token);
+  };
 
-  for (var i = 0; i !== operatorGroups.length; i++) {
+  var expr = operatorGroups.reduce(
+    function(prevTokens, opGroup) {
+      assert(opGroup.length >= 1);
 
-  }
+      var associativity = opGroup[0].associativity;
+      var arity = opGroup[0].arity;
+
+      assert(opGroup.every(function(op) {
+        return (
+          op.associativity === associativity &&
+          op.arity === arity
+        );
+      }));
+
+      assert(
+        associativity === 'left-to-right' ||
+        associativity === 'right-to-left'
+      );
+
+      assert(arity === 1 || arity === 2);
+
+      var pass = (arity === 1 ? unaryPass : binaryPass);
+
+      var makeOp = (arity === 1 ?
+        function(op, val) {
+          return {
+            type: 'expression',
+            fn: op,
+            args: [val]
+          };
+        } :
+        function(lval, op, rval) {
+          return {
+            type: 'expression',
+            fn: op,
+            args: [lval, rval]
+          };
+        }
+      );
+
+      if (associativity === 'right-to-left') {
+        var revTokens = reverse(prevTokens);
+        var passed = pass(opTest, valTest, makeOp, revTokens);
+        return reverse(arrayView(passed));
+      }
+
+      return pass(opTest, valTest, makeOp, tokens);
+    },
+    arrayView(tokens)
+  );
+
+  assert(expr.length() === 1);
+
+  return expr.get(0);
 };
-
-/*
-
-var grouped = precedenceGrouper(
-  [
-    ['.'],
-    ['=', '~'],
-    ['*', '/', '%'],
-    ['+', '-']
-  ],
-  [
-      {type: 'operator', value: '+'},
-      {type: 'value', value: [['any']]}
-  ]
-]);
-
-*/
