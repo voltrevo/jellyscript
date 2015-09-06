@@ -24,7 +24,7 @@
   "homepage": "https://github.com/voltrevo/jellyscript#readme",
   "dependencies": {
     "eslint": "^1.3.1",
-    "eslint-config-voltrevo": "0.0.2",
+    "eslint-config-voltrevo": "0.0.3",
     "parser": "git+ssh://git@github.com:voltrevo/parser.git#e6a54ad0b54754cca9aeed81ef473ae97351ec11"
   }
 }

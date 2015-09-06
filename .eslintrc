@@ -1,3 +1,7 @@
 {
-  "extends": "eslint-config-voltrevo"
+  "extends": "eslint-config-voltrevo",
+
+  "rules": {
+    "vars-on-top": 0
+  }
 }
