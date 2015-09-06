@@ -2,13 +2,10 @@
 
 var parser = require('parser');
 
-var string = require('./string.js');
+var makeBlock = require('./makeBlock.js');
+var statement = require('./statement.js');
 
-module.exports = parser.block(
-  parser.char('{'),
-  parser.or(
-    string.returnCode,
-    parser.any
-  ),
-  parser.char('}')
+module.exports = parser.layer(
+  makeBlock('{', '}'),
+  parser.many(statement)
 );
