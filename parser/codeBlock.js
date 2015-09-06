@@ -2,9 +2,13 @@
 
 var parser = require('parser');
 
-// TODO: strings mess this up
+var string = require('./string.js');
 
 module.exports = parser.block(
   parser.char('{'),
+  parser.or(
+    string.returnCode,
+    parser.any
+  ),
   parser.char('}')
 );
