@@ -2,7 +2,9 @@
 
 var createOperator = require('./createOperator.js');
 
-module.exports = [
+var operators = {};
+
+operators.groups = [
   [
     ['dot',              '.',  2, 'left-to-right'],
   ], [
@@ -46,3 +48,15 @@ module.exports = [
     return createOperator.apply(undefined, operatorArgs);
   });
 });
+
+var consumerList = [];
+
+operators.groups.forEach(function(operatorGroup) {
+  operatorGroup.forEach(function(operator) {
+    consumerList.push(operator.consumer);
+  });
+});
+
+operators.any = parser.or.apply(undefined, consumerList);
+
+module.exports = operators;
