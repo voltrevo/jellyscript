@@ -3,12 +3,12 @@
 var parser = require('parser');
 
 var operators = require('../operators');
-var rvalue = require('../rvalue.js');
+var value = require('../value.js');
 
 module.exports = parser.sequence(
   parser.many(
     parser.wrapOptionalWhitespace(parser.or(
-      rvalue,
+      value,
       operators.any
     ))
   )

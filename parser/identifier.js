@@ -8,10 +8,10 @@ module.exports = parser.transform(
       parser.regexChar(/^[a-zA-Z0-9_]$/)
     ),
     function(value) {
-      return !/^[0-9]$/.test(value[0])
+      return !/^[0-9]$/.test(value[0]);
     }
   ),
   function(value) {
-    return value.join('')
+    return value.join('');
   }
 );
