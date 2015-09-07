@@ -2,6 +2,7 @@
 
 /* global describe it */
 
+var assert = require('assert');
 var expect = require('chai').expect;
 
 var parser = require('parser');
@@ -14,6 +15,8 @@ module.exports = function(consumerName, consumerParam, opts) {
     if (opts.valid) {
       describe('succeeds for valid inputs', function() {
         opts.valid.map(function(inputOutput) {
+          assert(Array.isArray(inputOutput));
+
           if (inputOutput[0] === '-- --x') {
             debugger;
           }
@@ -41,6 +44,8 @@ module.exports = function(consumerName, consumerParam, opts) {
     if (opts.invalid) {
       describe('fails for invalid inputs', function() {
         opts.invalid.map(function(inputOnly) {
+          assert(Array.isArray(inputOnly));
+
           return {
             input: inputOnly[0],
             output: consumer(new Stream(inputOnly[0]))

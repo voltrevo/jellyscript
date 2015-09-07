@@ -8,7 +8,7 @@ var returnStatement = require('./returnStatement.js');
 var semicolon = require('./semicolon.js');
 
 module.exports = parser.labelledOr(
-  ['expression', parser.sequence(expression, semicolon)],
-  ['controlStructure', controlStructure],
-  ['returnStatement', returnStatement]
+  ['returnStatement', returnStatement],
+  ['expression', parser.sequence(expression, parser.optionalWhitespace, semicolon)],
+  ['controlStructure', controlStructure]
 );

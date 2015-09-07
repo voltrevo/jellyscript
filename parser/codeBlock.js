@@ -7,5 +7,7 @@ var statement = require('./statement.js');
 
 module.exports = parser.layer(
   makeBlock('{', '}'),
-  parser.many(statement)
+  parser.many(
+    parser.wrapOptionalWhitespace(statement)
+  )
 );
