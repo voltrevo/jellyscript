@@ -14,7 +14,7 @@ module.exports = function(consumerName, consumerParam, opts) {
     if (opts.valid) {
       describe('succeeds for valid inputs', function() {
         opts.valid.map(function(inputOutput) {
-          if (inputOutput[0] === '1 + 1') {
+          if (inputOutput[0] === '-- --x') {
             debugger;
           }
 

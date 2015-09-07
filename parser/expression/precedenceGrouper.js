@@ -34,11 +34,11 @@ var unaryPass = function(opTest, valTest, makeOp, sequence) {
     var currOp = opTest(curr);
     var next = (i + 1 < length ? sequence.get(i + 1) : undefined);
 
-    if (currOp !== undefined && (next === undefined || !valTest(next))) {
-      if (i === 0 || !valTest(last())) {
-        return undefined;
-      }
-
+    if (
+      currOp !== undefined &&
+      (next === undefined || !valTest(next)) &&
+      !(i === 0 || !valTest(last()))
+    ) {
       result.push(makeOp(result.pop(), currOp));
     } else {
       result.push(curr);
@@ -61,6 +61,10 @@ var binaryPass = function(opTest, valTest, makeOp, sequence) {
       var next = sequence.get(i + 1);
 
       if (i === 0 || !valTest(last()) || !valTest(next)) {
+        // TODO: Not sure whether this is the theoretically the right thing to do or whether it
+        // happens to do the right thing because of the specific operator precedence set being used.
+        // It could be that this should give operators of lower precedence an opportunity to
+        // construct the expression after unary operators have left values on both sides.
         return undefined;
       }
 

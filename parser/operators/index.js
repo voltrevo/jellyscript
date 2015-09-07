@@ -38,6 +38,7 @@ operators.groups = [
   ], [
     ['or',               '||', 2, 'left-to-right']
   ], [
+    ['assign',           '=',  2, 'right-to-left'],
     ['mutate',           '~',  2, 'right-to-left'],
     ['plus-mutate',      '+~', 2, 'right-to-left'],
     ['minus-mutate',     '-~', 2, 'right-to-left'],
