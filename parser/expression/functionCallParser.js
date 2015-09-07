@@ -18,13 +18,29 @@ var expressionList = parser.constrain(
   typeConstraint('expression-list')
 );
 
-var callParamsList = parser.transform(
-  expressionList,
+var singleElementArray = parser.constrain(
+  parser.any,
   function(token) {
-    return {
-      type: 'call-params',
-      value: token.value
-    };
+    var isArray = ('label' in token && token.label === 'array');
+    return isArray && token.value.length === 1;
+  }
+);
+
+var callParamsOrSubscript = parser.transform(
+  parser.or(
+    expressionList,
+    singleElementArray
+  ),
+  function(token) {
+    return (
+      'label' in token && token.label === 'array' ? {
+        type: 'subscript',
+        value: token.value[0]
+      } : {
+        type: 'call-params',
+        value: token.value
+      }
+    );
   }
 );
 
@@ -60,7 +76,7 @@ module.exports = parser.mustConsumeAll(parser.many(
           valueList,
           nonListValue
         ),
-        parser.many(callParamsList)
+        parser.many(callParamsOrSubscript)
       ),
       function(parsed) {
         var fn = parsed[0];
@@ -69,13 +85,25 @@ module.exports = parser.mustConsumeAll(parser.many(
         var res = fn;
 
         while (callLists.length > 0) {
-          res = {
-            type: 'function-call',
-            value: {
-              function: res,
-              args: callLists.shift()
-            }
-          };
+          var callList = callLists.shift();
+
+          if (callList.type === 'subscript') {
+            res = {
+              type: 'subscript',
+              value: {
+                array: res,
+                subscript: callList.value
+              }
+            };
+          } else {
+            res = {
+              type: 'function-call',
+              value: {
+                function: res,
+                args: callList.value
+              }
+            };
+          }
         }
 
         return res;
