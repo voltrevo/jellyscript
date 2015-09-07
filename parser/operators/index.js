@@ -51,12 +51,20 @@ operators.groups = [
   });
 });
 
-var consumerList = [];
+var operatorList = [];
 
 operators.groups.forEach(function(operatorGroup) {
   operatorGroup.forEach(function(operator) {
-    consumerList.push(operator.consumer);
+    operatorList.push(operator);
   });
+});
+
+operatorList.sort(function(a, b) {
+  return b.str.length - a.str.length;
+});
+
+var consumerList = operatorList.map(function(operator) {
+  return operator.consumer;
 });
 
 operators.any = parser.or.apply(undefined, consumerList);

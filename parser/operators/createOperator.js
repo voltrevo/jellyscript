@@ -8,6 +8,7 @@ module.exports = function(name, str, arity, associativity) {
 
   return {
     name: name,
+    str: str,
     consumer: parser.transform(
       parser.string(str),
       function() {
