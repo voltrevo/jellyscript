@@ -39,7 +39,10 @@ generator('expression', expression, {
     ['foo~bar++'],
     ['foo~++bar++'],
     ['a = b = c = d'],
-    ['a.b = b.c = c.d']
+    ['a.b = b.c = c.d'],
+    ['func => nil'],
+    ['3 + func => nil'],
+    ['func { return nil; } + 1']
   ],
   invalid: [
     [''],
