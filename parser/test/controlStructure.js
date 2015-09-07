@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: `for {}` and `if (true) {} else if (true) {} else {}` untested
+
 var controlStructure = require('../controlStructure.js');
 var generator = require('./generator.js');
 

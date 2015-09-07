@@ -5,7 +5,7 @@ module.exports = function() {
 
   var argumentList = require('./argumentList.js');
   var arrow = require('./arrow.js');
-  var functionBlockBody = require('./functionBlockBody.js');
+  var program = require('./program.js');
   var expression = require('./expression');
   var funcKeyword = require('./funcKeyword.js');
 
@@ -20,7 +20,7 @@ module.exports = function() {
         parser.optionalWhitespace,
         expression
       )],
-      ['blockBody', functionBlockBody]
+      ['blockBody', program]
     )
   );
 

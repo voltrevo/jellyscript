@@ -16,6 +16,9 @@ newton = func(f, df, start, tol, maxIter) {
       return nil;
     }
   }
+
+  assert(false);
+  return nil;
 };
 
 test(func {
