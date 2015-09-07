@@ -54,7 +54,10 @@ generator('expression', expression, {
     ['7u'],
     [' 1'],
     ['1 '],
-    ['(1)'], // TODO: this should be valid, but parenthetical expressions are not yet implemented
+
+    // TODO: this should be valid, but parenthetical expressions are not yet implemented.
+    ['(1)'],
+
     ['3-'],
     ['1e1.1'],
     ['"'],
