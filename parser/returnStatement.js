@@ -9,5 +9,6 @@ module.exports = parser.sequence(
   returnKeyword,
   parser.whitespace,
   expression,
+  parser.optionalWhitespace,
   semicolon
 );

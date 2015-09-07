@@ -1,5 +1,7 @@
 'use strict';
 
+// TODO: Should keywords be invalid identifiers?
+
 var parser = require('parser');
 
 module.exports = parser.transform(
