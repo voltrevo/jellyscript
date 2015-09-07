@@ -35,11 +35,38 @@ generator('function', function_, {
     ['func { return a = b = c = d; }'],
     ['func { a.b = b.c = c.d; return a+b+c  ; }'],
     ['func {return return17;}'],
-    ['func{false ; return 0;}']
+    ['func{false ; return 0;}'],
+
+    ['func() { return nil; }'],
+    ['func () { return nil; }'],
+    ['func (){ return nil; }'],
+    ['func (){return nil; }'],
+    ['func (){ return nil;}'],
+    ['func(x, y) { return x + y; }'],
+    ['func(xParam) { x = 2 * xParam; return x; }'],
+
+    ['func=> nil'],
+    ['func=> 0'],
+    ['func=> x * 2'],
+    ['func =>nil'],
+    ['func =>0'],
+    ['func =>x * 2'],
+    ['func => nil'],
+    ['func => 0'],
+    ['func => x * 2'],
+
+    ['func(x) => x * 2'],
+    ['func(x, y, z) => nil'],
+    ['func(x, y, z) => x + y + z'],
+
+    // TODO: This probably should be invalid. Right now it considers `return` to be a valid
+    // expression, because it sees return as an identifier. Keywords probably shouldn't be allowed
+    // as identifiers but I would like to allow them as property names, and currently `.` is just
+    // an operator, and relies on identifiers being valid right operands.
+    ['func => return']
   ],
   invalid: [
     ['func return'],
-    ['func => return'],
     ['func{ return nil; }}'],
     ['func{};'],
     [' func{return 0;}'],
@@ -77,6 +104,23 @@ generator('function', function_, {
     ['func{|}'],
     ['func{**}'],
     ['func{===}'],
-    ['func{!==}']
+    ['func{!==}'],
+
+    ['func() { return nil; '],
+    ['fun () { return nil; }'],
+    ['func ({ return nil; }'],
+    ['func ){return nil; }'],
+    ['func ()return nil;}'],
+    ['func(x y) { return x + y; }'],
+    ['func(xParam) { x = 2 * xParam return x; }'],
+
+    ['func =>'],
+    ['func => 0;'],
+    ['func = x * 2'],
+    ['func > x * 2'],
+
+    ['func(x) = x * 2'],
+    ['func(x, y, z) => nil nil'],
+    ['func(x, y, z) => x + y, z']
   ]
 });

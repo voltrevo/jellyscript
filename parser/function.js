@@ -13,9 +13,11 @@ module.exports = function() {
     funcKeyword,
     parser.optionalWhitespace,
     parser.optional(argumentList),
+    parser.optionalWhitespace,
     parser.labelledOr(
       ['expressionBody', parser.sequence(
         arrow,
+        parser.optionalWhitespace,
         expression
       )],
       ['blockBody', parser.constrain(
