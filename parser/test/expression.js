@@ -1,7 +1,5 @@
 'use strict';
 
-// TODO: expressions can contain function calls and parenthetical expressions!
-
 var expression = require('../expression');
 var generator = require('./generator.js');
 
@@ -49,7 +47,12 @@ generator('expression', expression, {
     ['++(x)++'],
     ['(1 + 2) * (3 + 4)'],
     ['((1))'],
-    ['(3 * (1 + 1)) * 17']
+    ['(3 * (1 + 1)) * 17'],
+    ['x()'],
+    ['x(1, 2) + y(3, 4)'],
+    ['x((1))'],
+    ['(a)(b)'],
+    ['foo(3, 4 + 5 * (6 + y) / j(34))']
   ],
   invalid: [
     [''],
@@ -72,9 +75,12 @@ generator('expression', expression, {
     ['"""'],
     ['(\')'],
     ['(1one)'],
+    ['(1, 2)'],
+    ['x(())'],
     ['(,)'],
     ['(foo,)'],
     ['(,foo)'],
+    ['()'],
     [' ()'],
     ['() '],
     ['|'],

@@ -51,7 +51,7 @@ var nonListValue = parser.constrain(
   }
 );
 
-module.exports = parser.many(
+module.exports = parser.mustConsumeAll(parser.many(
   parser.or(
     operator,
     parser.transform(
@@ -83,4 +83,4 @@ module.exports = parser.many(
     ),
     valueList
   )
-);
+));

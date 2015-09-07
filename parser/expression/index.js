@@ -2,6 +2,7 @@
 
 var parser = require('parser');
 
+var functionCallGrouper = require('./functionCallGrouper.js');
 var operators = require('../operators');
 var precedenceGrouper = require('./precedenceGrouper.js');
 
@@ -14,9 +15,15 @@ module.exports = function() {
     parser.transform(
       rawExpression,
       function(tokens) {
+        var fnGroupedTokens = functionCallGrouper(tokens);
+
+        if (!fnGroupedTokens.success) {
+          return undefined;
+        }
+
         return precedenceGrouper(
           operators.groups,
-          tokens,
+          fnGroupedTokens.value,
           function(token) {
             return 'type' in token && token.type === 'operator-token';
           }
