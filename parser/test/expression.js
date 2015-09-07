@@ -42,7 +42,14 @@ generator('expression', expression, {
     ['a.b = b.c = c.d'],
     ['func => nil'],
     ['3 + func => nil'],
-    ['func { return nil; } + 1']
+    ['func { return nil; } + 1'],
+    ['(1)'],
+    ['2 * (3 + 4)'],
+    ['(x)++'],
+    ['++(x)++'],
+    ['(1 + 2) * (3 + 4)'],
+    ['((1))'],
+    ['(3 * (1 + 1)) * 17']
   ],
   invalid: [
     [''],
@@ -59,10 +66,6 @@ generator('expression', expression, {
     ['7u'],
     [' 1'],
     ['1 '],
-
-    // TODO: this should be valid, but parenthetical expressions are not yet implemented.
-    ['(1)'],
-
     ['3-'],
     ['1e1.1'],
     ['"'],

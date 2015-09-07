@@ -2,6 +2,8 @@
 
 var parser = require('parser');
 
+var expression = require('./index.js');
+var makeBlock = require('../makeBlock.js');
 var operators = require('../operators');
 var value = require('../value.js');
 
@@ -9,6 +11,10 @@ module.exports = parser.constrain(
   parser.list(
     parser.or(
       value,
+      parser.layer(
+        makeBlock('(', ')'),
+        expression
+      ),
 
       // TODO: There's a theoretical issue here where the exact operator actually can't be
       // determined at this step of the parser. For example in `1 + 1`, the `+` will be identified

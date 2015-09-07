@@ -44,7 +44,8 @@ generator('returnStatement', returnStatement, {
     ['return  foo;'],
     ['return  1;'],
     ['return 1 ;'],
-    ['return false ;']
+    ['return false ;'],
+    ['return (1);']
   ],
   invalid: [
     [''],
@@ -59,10 +60,6 @@ generator('returnStatement', returnStatement, {
     ['return &;'],
     ['return 1one;'],
     ['return 7u;'],
-
-    // TODO: this should be valid, but parenthetical expressions are not yet implemented.
-    ['return (1);'],
-
     ['return 3-;'],
     ['return 1e1.1;'],
     ['return ";'],
