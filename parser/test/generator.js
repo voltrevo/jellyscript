@@ -36,10 +36,10 @@ module.exports = function(consumerName, consumerParam, opts) {
 
     if (opts.invalid) {
       describe('fails for invalid inputs', function() {
-        opts.invalid.map(function(str) {
+        opts.invalid.map(function(inputOnly) {
           return {
-            input: str,
-            output: consumer(new Stream(str))
+            input: inputOnly[0],
+            output: consumer(new Stream(inputOnly[0]))
           };
         }).forEach(function(testCase) {
           it(JSON.stringify(testCase.input), function() {
