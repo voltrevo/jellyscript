@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO: expressions can contain functions, function calls, and parenthetical expressions!
+// TODO: expressions can contain function calls and parenthetical expressions!
 
 var expression = require('../expression');
 var generator = require('./generator.js');
