@@ -24,7 +24,7 @@ Concept code, and a not yet functioning WIP parser.
 - Properties can't be added to functions, arrays, etc. Only vanilla objects.
 - Enforce calling functions with correct number of args.
   - But explicit defaults for arguments and variadic functions relax this.
-- Functions either return something or they don't. There cannot be a code path that returns something and another that doesn't. I'm thinking of making it illegal to try to use the return value of a function that doesn't return, but it may end up being that you always need to return.
+- Functions must always return something explicitly. The return keyword can be avoided with the `=>` variations.
 - `==` and `!=` mean strict comparison, `===` and `!==` are illegal.
 - No type coercion. For example `+` will work with two strings or two numbers but not a mixture.
 - `import` is the only external variable provided to a module. Modifying the `import` passed in to a module is supported and is encouraged (but very frequent use is probably an anti-pattern).

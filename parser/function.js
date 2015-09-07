@@ -10,14 +10,36 @@ module.exports = function() {
   var funcKeyword = require('./funcKeyword.js');
 
   var function_ = parser.sequence(
-    parser.wrapOptionalWhitespace(funcKeyword),
+    funcKeyword,
+    parser.optionalWhitespace,
     parser.optional(argumentList),
     parser.labelledOr(
       ['expressionBody', parser.sequence(
         arrow,
         expression
       )],
-      ['blockBody', codeBlock]
+      ['blockBody', parser.constrain(
+        codeBlock,
+        function(parsedCodeBlock) {
+          if (parsedCodeBlock.length === 0) {
+            return false;
+          }
+
+          var isReturnMap = parsedCodeBlock.map(function(statement) {
+            return statement.label === 'returnStatement';
+          });
+
+          var lastIsReturn = isReturnMap.pop();
+
+          if (!lastIsReturn) {
+            return false;
+          }
+
+          return isReturnMap.every(function(isReturn) {
+            return !isReturn;
+          });
+        }
+      )]
     )
   );
 
