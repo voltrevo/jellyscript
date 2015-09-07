@@ -4,7 +4,7 @@
   "description": "A scripting language that's a lot like javascript, but stripped down, much stricter, and with a few tweaks.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha parser/test"
   },
   "repository": {
     "type": "git",
