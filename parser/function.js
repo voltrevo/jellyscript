@@ -5,7 +5,7 @@ module.exports = function() {
 
   var argumentList = require('./argumentList.js');
   var arrow = require('./arrow.js');
-  var codeBlock = require('./codeBlock.js');
+  var functionBlockBody = require('./functionBlockBody.js');
   var expression = require('./expression');
   var funcKeyword = require('./funcKeyword.js');
 
@@ -20,28 +20,7 @@ module.exports = function() {
         parser.optionalWhitespace,
         expression
       )],
-      ['blockBody', parser.constrain(
-        codeBlock,
-        function(parsedCodeBlock) {
-          if (parsedCodeBlock.length === 0) {
-            return false;
-          }
-
-          var isReturnMap = parsedCodeBlock.map(function(statement) {
-            return statement.label === 'returnStatement';
-          });
-
-          var lastIsReturn = isReturnMap.pop();
-
-          if (!lastIsReturn) {
-            return false;
-          }
-
-          return isReturnMap.every(function(isReturn) {
-            return !isReturn;
-          });
-        }
-      )]
+      ['blockBody', functionBlockBody]
     )
   );
 
