@@ -14,7 +14,7 @@ module.exports = function(name, str, arity, associativity) {
       function() {
         return {
           type: 'operator-token',
-          name: name
+          str: str
         };
       }
     ),

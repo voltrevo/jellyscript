@@ -4,6 +4,7 @@
   "rules": {
     "vars-on-top": 0,
     "no-warning-comments": 0,
-    "dot-notation": [2, {"allowKeywords": true}]
+    "dot-notation": [2, {"allowKeywords": true}],
+    "no-undef-init": 0
   }
 }

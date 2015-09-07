@@ -3,6 +3,10 @@
 var assert = require('assert');
 
 var arrayView = function(arr) {
+  if (arr === undefined) {
+    return undefined;
+  }
+
   return {
     get: function(n) { return arr[n]; },
     length: function() { return arr.length; }
@@ -10,6 +14,10 @@ var arrayView = function(arr) {
 };
 
 var reverse = function(arrView) {
+  if (arrView === undefined) {
+    return undefined;
+  }
+
   return {
     get: function(n) { return arrView.get(arrView.length() - n - 1); },
     length: arrView.length
@@ -23,13 +31,15 @@ var unaryPass = function(opTest, valTest, makeOp, sequence) {
 
   for (var i = 0; i !== length; i++) {
     var curr = sequence.get(i);
+    var currOp = opTest(curr);
+    var next = (i + 1 < length ? sequence.get(i + 1) : undefined);
 
-    if (opTest(curr)) {
+    if (currOp !== undefined && (next === undefined || !valTest(next))) {
       if (i === 0 || !valTest(last())) {
         return undefined;
       }
 
-      result.push(makeOp(result.pop(), curr));
+      result.push(makeOp(result.pop(), currOp));
     } else {
       result.push(curr);
     }
@@ -41,19 +51,20 @@ var unaryPass = function(opTest, valTest, makeOp, sequence) {
 var binaryPass = function(opTest, valTest, makeOp, sequence) {
   var result = [];
   var last = function() { return result[result.length - 1]; };
-  var lengthM1 = sequence.length() - 1;
+  var length = sequence.length();
 
-  for (var i = 0; i < lengthM1; i++) {
+  for (var i = 0; i < length; i++) {
     var curr = sequence.get(i);
+    var currOp = opTest(curr);
 
-    if (opTest(curr)) {
+    if (currOp !== undefined && i + 1 < length) {
       var next = sequence.get(i + 1);
 
       if (i === 0 || !valTest(last()) || !valTest(next)) {
         return undefined;
       }
 
-      result.push(makeOp(result.pop(), curr, next));
+      result.push(makeOp(result.pop(), currOp, next));
       i++;
     } else {
       result.push(curr);
@@ -70,6 +81,11 @@ module.exports = function(operatorGroups, tokens, opTest) {
 
   var expr = operatorGroups.reduce(
     function(prevTokens, opGroup) {
+      if (prevTokens === undefined) {
+        return undefined;
+      }
+
+      assert(prevTokens.length() >= 1);
       assert(opGroup.length >= 1);
 
       var associativity = opGroup[0].associativity;
@@ -108,18 +124,43 @@ module.exports = function(operatorGroups, tokens, opTest) {
         }
       );
 
+      var opGroupTest = function(token) {
+        if (!opTest(token)) {
+          return undefined;
+        }
+
+        var actualOp = undefined;
+
+        opGroup.forEach(function(op) {
+          if (op.str === token.str) {
+            assert(actualOp === undefined);
+            actualOp = op;
+          }
+        });
+
+        return actualOp;
+      };
+
       if (associativity === 'right-to-left') {
         var revTokens = reverse(prevTokens);
-        var passed = pass(opTest, valTest, makeOp, revTokens);
+        var passed = pass(opGroupTest, valTest, makeOp, revTokens);
         return reverse(arrayView(passed));
       }
 
-      return pass(opTest, valTest, makeOp, tokens);
+      return arrayView(pass(opGroupTest, valTest, makeOp, prevTokens));
     },
     arrayView(tokens)
   );
 
-  assert(expr.length() === 1);
+  if (expr === undefined) {
+    return undefined;
+  }
+
+  assert(expr.length() >= 1);
+
+  if (expr.length() > 1) {
+    return undefined;
+  }
 
   return expr.get(0);
 };
