@@ -2,13 +2,24 @@
 
 var parser = require('parser');
 
-// TODO: This is a dummy implementation that throws an error for if/for instead of actually parsing.
-module.exports = parser.constrain(
-  parser.or(
-    parser.string('if'),
-    parser.string('for')
-  ),
-  function() {
-    throw new Error('control structures not yet unimplemented');
-  }
-);
+module.exports = function() {
+  var codeBlock = require('./codeBlock.js');
+  var expression = require('./expression');
+  var makeBlock = require('./makeBlock.js');
+
+  var controlStructure = parser.sequence(
+    parser.or(
+      parser.string('if'),
+      parser.string('for')
+    ),
+    parser.optionalWhitespace,
+    parser.layer(
+      makeBlock('(', ')'),
+      parser.wrapOptionalWhitespace(expression)
+    ),
+    parser.optionalWhitespace,
+    codeBlock
+  );
+
+  return controlStructure.apply(this, arguments);
+};
