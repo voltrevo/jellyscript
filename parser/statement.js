@@ -7,13 +7,13 @@ var expression = require('./expression');
 var returnStatement = require('./returnStatement.js');
 var semicolon = require('./semicolon.js');
 
-module.exports = parser.labelledOr(
-  ['returnStatement', returnStatement],
-  ['expression', parser.transform(
+module.exports = parser.or(
+  returnStatement,
+  parser.transform(
     parser.sequence(expression, parser.optionalWhitespace, semicolon),
     function(res) {
       return res[0];
     }
-  )],
-  ['controlStructure', controlStructure]
+  ),
+  controlStructure
 );
