@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/voltrevo/jellyscript#readme",
   "dependencies": {
-    "parser": "git+ssh://git@github.com:voltrevo/parser.git#cf3586fea27eed3e0ac48b1a278094e86b77ba92"
+    "parser": "git+ssh://git@github.com:voltrevo/parser.git#3ef999997ae01f2a81eadf56ba876d1b472252f3"
   },
   "devDependencies": {
     "chai": "^3.2.0",
