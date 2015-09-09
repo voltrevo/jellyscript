@@ -12,7 +12,7 @@ module.exports = parser.constrain(
     }
 
     var isReturnMap = parsedCodeBlock.map(function(statement) {
-      return statement.label === 'returnStatement';
+      return statement.type === 'returnStatement';
     });
 
     var lastIsReturn = isReturnMap.pop();
