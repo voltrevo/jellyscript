@@ -1,23 +1,61 @@
 'use strict';
 
+var parser = require('parser');
+
 var makeBlock = require('../makeBlock.js');
 var generator = require('./generator.js');
 
-var braceBlock = makeBlock('{', '}');
-var parenthesesBlock = makeBlock('(', ')');
-var beginEndBlock = makeBlock('begin', 'end');
+var getString = function(consumer) {
+  return parser.transform(
+    consumer,
+    function(stream) {
+      var str = '';
+
+      while (!stream.finished()) {
+        str += stream.next();
+      }
+
+      return str;
+    }
+  );
+};
+
+var braceBlock = getString(makeBlock('{', '}'));
+var parenthesesBlock = getString(makeBlock('(', ')'));
+var beginEndBlock = getString(makeBlock('begin', 'end'));
 
 generator('braceBlock', braceBlock, {
   valid: [
-    ['{}'],
-    ['{foo}'],
-    ['{anything can go here}'],
-    ['{seriously, anything}'],
-    ['{this parser gets layered, so usually the content goes into a separate parser}'],
-    ['{hooray for modularity!}'],
-    ['{{begin and end blocks {must} be {balanced}}}'],
-    ['{a string shouldn\'t mess up the balance though, so this is allowed: "}"}'],
-    ['{"strings can also escape quotes like this: \\" and block markers are still ignored: }"}']
+    ['{}', ''],
+    ['{foo}', 'foo'],
+    ['{anything can go here}', 'anything can go here'],
+    ['{seriously, anything}', 'seriously, anything'],
+    [
+      '{this parser gets layered, so usually the content goes into a ' +
+      'separate parser}',
+
+      'this parser gets layered, so usually the content goes into a separate ' +
+      'parser'
+    ],
+    ['{hooray for modularity!}', 'hooray for modularity!'],
+    [
+      '{{begin and end blocks {must} be {balanced}}}',
+      '{begin and end blocks {must} be {balanced}}'
+    ],
+    [
+      '{a string shouldn\'t mess up the balance though, ' +
+      'so this is allowed: "}"}',
+
+      'a string shouldn\'t mess up the balance though, ' +
+      'so this is allowed: "}"'
+    ],
+    [
+      '{"strings can also escape quotes like this: \\" and block markers are ' +
+      'still ignored: }"}',
+
+      '"strings can also escape quotes like this: \\" and block markers are ' +
+      'still ignored: }"'
+    ]
   ],
   invalid: [
     [''],
