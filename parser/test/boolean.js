@@ -5,8 +5,8 @@ var generator = require('./generator.js');
 
 generator('boolean', boolean, {
   valid: [
-    ['true'],
-    ['false']
+    ['true', true],
+    ['false', false]
   ],
   invalid: [
     [''],

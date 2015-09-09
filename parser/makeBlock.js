@@ -19,25 +19,15 @@ var streamToArray = function(stream) {
   return arr;
 };
 
-// TODO: shouldn't this be the default behaviour of parser.string?
-var stringParser = function(str) {
-  return parser.transform(
-    parser.string(str),
-    function(arr) {
-      return arr.join('');
-    }
-  );
-};
-
 module.exports = function(openStr, closeStr) {
   return parser.transform(
     parser.block(
-      stringParser(openStr),
+      parser.string(openStr),
       parser.or(
         string.returnCode,
         parser.any
       ),
-      stringParser(closeStr)
+      parser.string(closeStr)
     ),
     function(resParam) {
       // TODO: this is an unfortunate hack... there really should instead be a parser utility that
