@@ -18,11 +18,8 @@ window.addEventListener('load', function() {
   ta.style.outline = 'none';
   ta.style.boxSizing = 'border-box';
 
-  var button = document.createElement('button');
-  var result = document.createElement('div');
-
   document.body.appendChild(ta);
-  ta.focus()
+  ta.focus();
 
   ta.value = [
     'console = import("console");',
@@ -44,7 +41,7 @@ window.addEventListener('load', function() {
     console.log('Parse finished in ' + (end - start) + ' ms');
     window.ast = parseResult.value;
   };
-  
+
   ta.addEventListener('input', check);
   check();
   console.log('Inspect window.ast to look at the parser output');
