@@ -1,19 +1,25 @@
 'use strict';
 
-var string = require('../string.js').raw;
+var string = require('../string.js').returnContent;
 var generator = require('./generator.js');
 
 generator('string', string, {
   valid: [
-    ['""'],
-    ['"hello world!"'],
-    ['" leading whitespace"'],
-    ['"trailing whitespace "'],
-    ['" leading and trailing whitespace "'],
-    ['"escaped \\"quote"'],
-    ['"escaped \\"quotes\\""'],
-    ['"lots of escaped quotes\\"\\"\\"\\"\\"\\"\\"\\"\\""'],
-    ['"escap\\ing other \\charac\\ters"']
+    ['""', ''],
+    ['"hello world!"', 'hello world!'],
+    ['" leading whitespace"', ' leading whitespace'],
+    ['"trailing whitespace "', 'trailing whitespace '],
+    [
+      '" leading and trailing whitespace "',
+      ' leading and trailing whitespace '
+    ],
+    ['"escaped \\"quote"', 'escaped "quote'],
+    ['"escaped \\"quotes\\""', 'escaped "quotes"'],
+    [
+      '"lots of escaped quotes\\"\\"\\"\\"\\"\\"\\"\\"\\""',
+      'lots of escaped quotes"""""""""'
+    ],
+    ['"escap\\ing other \\charac\\ters"', 'escaping other characters']
   ],
   invalid: [
     [''],
