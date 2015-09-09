@@ -9,7 +9,7 @@ var nonNegativeInteger = parser.transform(
 
     value.forEach(function(digit) {
       result *= 10;
-      result += digit;
+      result += Number(digit);
     });
 
     return result;
