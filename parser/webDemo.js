@@ -5,17 +5,18 @@ var Stream = require('parser').stream;
 var programParser = require('./program.js');
 
 window.addEventListener('load', function() {
-  document.body.style.margin = '0'
+  document.body.style.margin = '0';
 
-  var ta = document.createElement('textarea')
-  ta.style.width = '100vw'
-  ta.style.height = '100vh'
-  ta.style.padding = '10px'
-  ta.style.fontFamily = 'Courier New'
-  ta.style.fontSize = '1em'
-  ta.style.border = '0'
-  ta.style.resize = 'none'
-  ta.style.outline = 'none'
+  var ta = document.createElement('textarea');
+  ta.style.width = '100vw';
+  ta.style.height = '100vh';
+  ta.style.padding = '10px';
+  ta.style.fontFamily = 'Courier New';
+  ta.style.fontSize = '1em';
+  ta.style.border = '0';
+  ta.style.resize = 'none';
+  ta.style.outline = 'none';
+  ta.style.boxSizing = 'border-box';
 
   var button = document.createElement('button');
   var result = document.createElement('div');
