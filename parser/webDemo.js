@@ -42,8 +42,10 @@ window.addEventListener('load', function() {
     document.body.style.backgroundColor = color;
     ta.style.backgroundColor = color;
     console.log('Parse finished in ' + (end - start) + ' ms');
+    window.ast = parseResult.value;
   };
   
   ta.addEventListener('input', check);
   check();
+  console.log('Inspect window.ast to look at the parser output');
 });
