@@ -9,6 +9,11 @@ var semicolon = require('./semicolon.js');
 
 module.exports = parser.labelledOr(
   ['returnStatement', returnStatement],
-  ['expression', parser.sequence(expression, parser.optionalWhitespace, semicolon)],
+  ['expression', parser.transform(
+    parser.sequence(expression, parser.optionalWhitespace, semicolon),
+    function(res) {
+      return res[0];
+    }
+  )],
   ['controlStructure', controlStructure]
 );
