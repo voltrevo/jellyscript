@@ -17,13 +17,16 @@ module.exports = function() {
         parser.optionalWhitespace,
         parser.optional(argumentList),
         parser.optionalWhitespace,
-        parser.labelledOr(
-          ['expressionBody', parser.sequence(
-            arrow,
-            parser.optionalWhitespace,
-            expression
-          )],
-          ['blockBody', program]
+        parser.or(
+          parser.type('expressionBody', parser.transform(
+            parser.sequence(
+              arrow,
+              parser.optionalWhitespace,
+              expression
+            ),
+            function(res) { return res[2]; }
+          )),
+          parser.type('blockBody', program)
         )
       ),
       function(res) {
