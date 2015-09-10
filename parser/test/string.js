@@ -20,7 +20,15 @@ generator('string', string, {
       'lots of escaped quotes"""""""""'
     ],
     ['"escap\\ing other \\charac\\ters"', 'escaping other characters']
-  ],
+  ].map(function(inputOutput) {
+    return [
+      inputOutput[0],
+      {
+        type: 'string',
+        value: inputOutput[1]
+      }
+    ];
+  }),
   invalid: [
     [''],
     [' =>'],

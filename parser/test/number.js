@@ -17,13 +17,21 @@ generator('number', number, {
     ['9', 9],
     ['21873659235', 21873659235],
     ['0.3', 0.3],
-    ['.3', .3],
+    ['.3', 0.3],
     ['123e5', 123e5],
     ['-1', -1],
     ['-478349', -478349],
     ['-86e-32', -86e-32],
     ['-7.401e61', -7.401e61]
-  ],
+  ].map(function(inputOutput) {
+    return [
+      inputOutput[0],
+      {
+        type: 'number',
+        value: inputOutput[1]
+      }
+    ];
+  }),
   invalid: [
     [''],
     [' =>'],

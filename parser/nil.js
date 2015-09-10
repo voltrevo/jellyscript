@@ -2,4 +2,4 @@
 
 var parser = require('parser');
 
-module.exports = parser.string('nil');
+module.exports = parser.type('nil', parser.string('nil'));

@@ -11,13 +11,13 @@ var number = require('./number.js');
 var object = require('./object.js');
 var string = require('./string.js').returnContent;
 
-module.exports = parser.labelledOr(
-  ['array', array],
-  ['boolean', boolean],
-  ['function', function_],
-  ['identifier', identifier],
-  ['nil', nil],
-  ['number', number],
-  ['object', object],
-  ['string', string]
+module.exports = parser.or(
+  array,
+  boolean,
+  function_,
+  identifier,
+  nil,
+  number,
+  object,
+  string
 );

@@ -4,7 +4,7 @@
 
 var parser = require('parser');
 
-module.exports = parser.transform(
+module.exports = parser.type('identifier', parser.transform(
   parser.constrain(
     parser.oneOrMore(
       parser.regexChar(/^[a-zA-Z0-9_]$/)
@@ -16,4 +16,4 @@ module.exports = parser.transform(
   function(value) {
     return value.join('');
   }
-);
+));

@@ -7,7 +7,7 @@ var expression = require('./expression');
 var identifier = require('./identifier.js');
 var string = require('./string.js').returnContent;
 
-module.exports = parser.sequence(
+module.exports = parser.type('object', parser.sequence(
   parser.char('{'),
   parser.list(
     parser.wrapOptionalWhitespace(parser.sequence(
@@ -21,4 +21,4 @@ module.exports = parser.sequence(
     comma
   ),
   parser.char('}')
-);
+));

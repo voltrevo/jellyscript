@@ -2,7 +2,7 @@
 
 var parser = require('parser');
 
-module.exports = parser.transform(
+module.exports = parser.type('boolean', parser.transform(
   parser.or(
     parser.string('true'),
     parser.string('false')
@@ -10,4 +10,4 @@ module.exports = parser.transform(
   function(arr) {
     return arr[0] === 't';
   }
-);
+));

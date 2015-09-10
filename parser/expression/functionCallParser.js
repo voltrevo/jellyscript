@@ -21,7 +21,7 @@ var expressionList = parser.constrain(
 var singleElementArray = parser.constrain(
   parser.any,
   function(token) {
-    var isArray = ('label' in token && token.label === 'array');
+    var isArray = ('type' in token && token.type === 'array');
     return isArray && token.value.length === 1;
   }
 );
@@ -33,7 +33,7 @@ var callParamsOrSubscript = parser.transform(
   ),
   function(token) {
     return (
-      'label' in token && token.label === 'array' ? {
+      'type' in token && token.type === 'array' ? {
         type: 'subscript',
         value: token.value[0]
       } : {

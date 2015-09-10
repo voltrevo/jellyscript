@@ -90,6 +90,9 @@ module.exports = parser.transform(
       numStr += value.exponent.value[1];
     }
 
-    return parseFloat(numStr);
+    return {
+      type: 'number',
+      value: parseFloat(numStr)
+    };
   }
 );

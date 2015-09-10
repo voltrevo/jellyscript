@@ -28,7 +28,7 @@ string.returnCode = parser.transform(
   }
 );
 
-string.returnContent = parser.transform(
+string.returnContent = parser.type('string', parser.transform(
   string.raw,
   function(result) {
     assert(result.length === 3);
@@ -42,6 +42,6 @@ string.returnContent = parser.transform(
       return chunk[1];
     }).join('');
   }
-);
+));
 
 module.exports = string;
