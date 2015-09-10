@@ -9,18 +9,29 @@ module.exports = function() {
   var expression = require('./expression');
   var funcKeyword = require('./funcKeyword.js');
 
-  var function_ = parser.sequence(
-    funcKeyword,
-    parser.optionalWhitespace,
-    parser.optional(argumentList),
-    parser.optionalWhitespace,
-    parser.labelledOr(
-      ['expressionBody', parser.sequence(
-        arrow,
+  var function_ = parser.type(
+    'function',
+    parser.transform(
+      parser.sequence(
+        funcKeyword,
         parser.optionalWhitespace,
-        expression
-      )],
-      ['blockBody', program]
+        parser.optional(argumentList),
+        parser.optionalWhitespace,
+        parser.labelledOr(
+          ['expressionBody', parser.sequence(
+            arrow,
+            parser.optionalWhitespace,
+            expression
+          )],
+          ['blockBody', program]
+        )
+      ),
+      function(res) {
+        return {
+          args: res[2].success ? res[2].value : [],
+          body: res[4]
+        };
+      }
     )
   );
 
