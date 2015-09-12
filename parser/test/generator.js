@@ -17,10 +17,6 @@ module.exports = function(consumerName, consumerParam, opts) {
         opts.valid.map(function(inputOutput) {
           assert(Array.isArray(inputOutput));
 
-          if (inputOutput[0] === '((1))') {
-            debugger;
-          }
-
           return {
             input: inputOutput[0],
             expectedOutput: {
