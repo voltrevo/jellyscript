@@ -3,15 +3,28 @@
 var argumentList = require('../argumentList.js');
 var generator = require('./generator.js');
 
+var makeIdentifier = function(str) {
+  return {
+    type: 'identifier',
+    value: str
+  };
+};
+
 generator('argumentList', argumentList, {
   valid: [
-    ['()'],
-    ['(a, b)'],
-    ['(x)'],
-    ['(a,b)'],
-    ['( a , b )'],
-    ['(one, two, three, four, five)'],
-    ['(six,seven , eight,nine ,ten)']
+    ['()', []],
+    ['(a, b)', ['a', 'b'].map(makeIdentifier)],
+    ['(x)', ['x'].map(makeIdentifier)],
+    ['(a,b)', ['a', 'b'].map(makeIdentifier)],
+    ['( a , b )', ['a', 'b'].map(makeIdentifier)],
+    [
+      '(one, two, three, four, five)',
+      ['one', 'two', 'three', 'four', 'five'].map(makeIdentifier)
+    ],
+    [
+      '(six,seven , eight,nine ,ten)',
+      ['six', 'seven', 'eight', 'nine', 'ten'].map(makeIdentifier)
+    ]
   ],
   invalid: [
     [''],
