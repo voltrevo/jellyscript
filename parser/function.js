@@ -5,9 +5,9 @@ module.exports = function() {
 
   var argumentList = require('./argumentList.js');
   var arrow = require('./arrow.js');
-  var program = require('./program.js');
   var expression = require('./expression');
   var funcKeyword = require('./funcKeyword.js');
+  var functionBlock = require('./functionBlock.js');
 
   var function_ = parser.type(
     'function',
@@ -26,7 +26,7 @@ module.exports = function() {
             ),
             function(res) { return res[2]; }
           )),
-          parser.type('blockBody', program)
+          parser.type('blockBody', functionBlock)
         )
       ),
       function(res) {
