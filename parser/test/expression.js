@@ -60,7 +60,18 @@ generator('expression', expression, {
     ['x[0][1][2]'],
     ['(x[0])[0](5, 6, 7) + [1, 2, 3, 4] + [5, 6, 7][0]'],
     ['x[func => nil]']
-  ],
+  ].map(function(inputOutput) {
+    return (inputOutput.length === 1 ?
+      inputOutput :
+      [
+        inputOutput[0],
+        {
+          type: 'expression',
+          value: inputOutput[1]
+        }
+      ]
+    );
+  }),
   invalid: [
     [''],
     [' =>'],
