@@ -26,6 +26,10 @@ module.exports = function() {
           }
         );
 
+        if (dottedTokens === undefined) {
+          return undefined;
+        }
+
         var fnGroupedTokens = functionCallGrouper(dottedTokens);
 
         if (!fnGroupedTokens.success) {
@@ -40,7 +44,7 @@ module.exports = function() {
           }
         );
 
-        if (expr.length > 1) {
+        if (expr === undefined || expr.length > 1) {
           return undefined;
         }
 

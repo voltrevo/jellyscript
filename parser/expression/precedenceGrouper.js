@@ -132,15 +132,26 @@ module.exports = function(operatorGroups, tokens, opTest) {
             }
           };
         } :
-        function(lval, op, rval) {
-          return {
-            type: 'binary-operation',
-            value: {
-              op: op.name,
-              args: [lval, rval]
-            }
-          };
-        }
+        (associativity === 'left-to-right' ?
+          function(lval, op, rval) {
+            return {
+              type: 'binary-operation',
+              value: {
+                op: op.name,
+                args: [lval, rval]
+              }
+            };
+          } :
+          function(rval, op, lval) {
+            return {
+              type: 'binary-operation',
+              value: {
+                op: op.name,
+                args: [lval, rval]
+              }
+            };
+          }
+        )
       );
 
       var opGroupTest = function(token) {
