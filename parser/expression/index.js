@@ -1,5 +1,6 @@
 'use strict';
 
+var assert = require('assert');
 var parser = require('parser');
 
 var functionCallGrouper = require('./functionCallGrouper.js');
@@ -15,19 +16,35 @@ module.exports = function() {
     parser.transform(
       rawExpression,
       function(tokens) {
-        var fnGroupedTokens = functionCallGrouper(tokens);
+        assert(operators.groups[0][0].name === 'dot');
+
+        var dottedTokens = precedenceGrouper(
+          operators.groups.slice(0, 1),
+          tokens,
+          function(token) {
+            return 'type' in token && token.type === 'operator-token';
+          }
+        );
+
+        var fnGroupedTokens = functionCallGrouper(dottedTokens);
 
         if (!fnGroupedTokens.success) {
           return undefined;
         }
 
-        return precedenceGrouper(
-          operators.groups,
+        var expr = precedenceGrouper(
+          operators.groups.slice(1),
           fnGroupedTokens.value,
           function(token) {
             return 'type' in token && token.type === 'operator-token';
           }
         );
+
+        if (expr.length > 1) {
+          return undefined;
+        }
+
+        return expr[0];
       }
     ),
     function(expr) {

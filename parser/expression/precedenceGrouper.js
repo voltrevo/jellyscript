@@ -24,6 +24,17 @@ var reverse = function(arrView) {
   };
 };
 
+var toArray = function(arrView) {
+  var res = [];
+  var len = arrView.length();
+
+  for (var i = 0; i !== len; i++) {
+    res.push(arrView.get(i));
+  }
+
+  return res;
+};
+
 var unaryPass = function(opTest, valTest, makeOp, sequence) {
   var result = [];
   var last = function() { return result[result.length - 1]; };
@@ -166,9 +177,5 @@ module.exports = function(operatorGroups, tokens, opTest) {
 
   assert(expr.length() >= 1);
 
-  if (expr.length() > 1) {
-    return undefined;
-  }
-
-  return expr.get(0);
+  return toArray(expr);
 };
