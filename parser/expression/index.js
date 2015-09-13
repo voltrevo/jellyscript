@@ -11,7 +11,7 @@ module.exports = function() {
   // rawExpression.
   var rawExpression = require('./rawExpression.js');
 
-  var expression = parser.constrain(
+  var expression = parser.type('expression', parser.constrain(
     parser.transform(
       rawExpression,
       function(tokens) {
@@ -33,7 +33,7 @@ module.exports = function() {
     function(expr) {
       return expr !== undefined;
     }
-  );
+  ));
 
   return expression.apply(this, arguments);
 };

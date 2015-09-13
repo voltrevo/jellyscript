@@ -112,18 +112,22 @@ module.exports = function(operatorGroups, tokens, opTest) {
       var pass = (arity === 1 ? unaryPass : binaryPass);
 
       var makeOp = (arity === 1 ?
-        function(op, val) {
+        function(val, op) {
           return {
-            type: 'expression',
-            fn: op,
-            args: [val]
+            type: 'unary-operation',
+            value: {
+              op: op.name,
+              arg: val
+            }
           };
         } :
         function(lval, op, rval) {
           return {
-            type: 'expression',
-            fn: op,
-            args: [lval, rval]
+            type: 'binary-operation',
+            value: {
+              op: op.name,
+              args: [lval, rval]
+            }
           };
         }
       );

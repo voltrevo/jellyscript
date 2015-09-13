@@ -5,7 +5,7 @@ var generator = require('./generator.js');
 
 generator('expression', expression, {
   valid: [
-    ['0'],
+    ['0', { type: 'number', value: 0 }],
     ['"foo"'],
     ['1 + 1'],
     ['x++'],
