@@ -6,31 +6,245 @@ var generator = require('./generator.js');
 generator('expression', expression, {
   valid: [
     ['0', { type: 'number', value: 0 }],
-    ['"foo"'],
-    ['1 + 1'],
-    ['x++'],
+    ['"foo"', { type: 'string', value: 'foo' }],
+
+    ['1 + 1', {
+      type: 'binary-operation',
+      value: {
+        op: 'plus',
+        args: [
+          { type: 'number', value: 1 },
+          { type: 'number', value: 1 }
+        ]
+      }
+    }],
+
+    ['x++', {
+      type: 'unary-operation',
+      value: {
+        op: 'post-increment',
+        arg: { type: 'identifier', value: 'x' }
+      }
+    }],
 
     // Yes this is valid as far as the parser is concerned. It would get rejected later.
-    ['1++'],
+    ['1++', {
+      type: 'unary-operation',
+      value: {
+        op: 'post-increment',
+        arg: { type: 'number', value: 1 }
+      }
+    }],
 
-    ['x++ + 1'],
-    ['++x++'],
-    ['--3'],
+    ['x++ + 1', {
+      type: 'binary-operation',
+      value: {
+        op: 'plus',
+        args: [
+          {
+            type: 'unary-operation',
+            value: {
+              op: 'post-increment',
+              arg: { type: 'identifier', value: 'x' }
+            }
+          },
+          { type: 'number', value: 1 }
+        ]
+      }
+    }],
+
+    ['++x++', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-increment',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'post-increment',
+            arg: { type: 'identifier', value: 'x' }
+          }
+        }
+      }
+    }],
+
+    ['--3', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-decrement',
+        arg: { type: 'number', value: 3 }
+      }
+    }],
 
     // Right now this is expected to be equivalent to '-- -x', but I'm not sure whether that's a
     // good idea.
-    ['---x'],
+    ['---x', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-decrement',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'unary-minus',
+            arg: { type: 'identifier', value: 'x' }
+          }
+        }
+      }
+    }],
 
-    ['---3'],
-    ['-- -x'],
-    ['-a + b'],
-    ['- - - - -x'],
-    ['x++ ++'],
-    ['-- --x'],
-    ['a.b'],
-    ['a.b++'],
-    ['a = b'],
-    ['a ~ b'],
+    ['-3', { type: 'number', value: -3 }],
+
+    ['---3', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-decrement',
+        arg: {
+          type: 'number',
+          value: -3
+        }
+      }
+    }],
+
+    ['-- -x', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-decrement',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'unary-minus',
+            arg: { type: 'identifier', value: 'x' }
+          }
+        }
+      }
+    }],
+
+    ['-a + b', {
+      type: 'binary-operation',
+      value: {
+        op: 'plus',
+        args: [
+          {
+            type: 'unary-operation',
+            value: {
+              op: 'unary-minus',
+              arg: { type: 'identifier', value: 'a' }
+            }
+          },
+          { type: 'identifier', value: 'b' }
+        ]
+      }
+    }],
+
+    ['- - - - -x', {
+      type: 'unary-operation',
+      value: {
+        op: 'unary-minus',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'unary-minus',
+            arg: {
+              type: 'unary-operation',
+              value: {
+                op: 'unary-minus',
+                arg: {
+                  type: 'unary-operation',
+                  value: {
+                    op: 'unary-minus',
+                    arg: {
+                      type: 'unary-operation',
+                      value: {
+                        op: 'unary-minus',
+                        arg: { type: 'identifier', value: 'x' }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }],
+
+    ['x++ ++', {
+      type: 'unary-operation',
+      value: {
+        op: 'post-increment',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'post-increment',
+            arg: { type: 'identifier', value: 'x' }
+          }
+        }
+      }
+    }],
+
+    ['-- --x', {
+      type: 'unary-operation',
+      value: {
+        op: 'pre-decrement',
+        arg: {
+          type: 'unary-operation',
+          value: {
+            op: 'pre-decrement',
+            arg: { type: 'identifier', value: 'x' }
+          }
+        }
+      }
+    }],
+
+    ['a.b', {
+      type: 'binary-operation',
+      value: {
+        op: 'dot',
+        args: [
+          { type: 'identifier', value: 'a' },
+          { type: 'identifier', value: 'b' }
+        ]
+      }
+    }],
+
+    ['a.b++', {
+      type: 'unary-operation',
+      value: {
+        op: 'post-increment',
+        arg: {
+          type: 'binary-operation',
+          value: {
+            op: 'dot',
+            args: [
+              { type: 'identifier', value: 'a' },
+              { type: 'identifier', value: 'b' }
+            ]
+          }
+        }
+      }
+    }],
+
+    ['a = b', {
+      type: 'binary-operation',
+      value: {
+        op: 'assign',
+        args: [
+          { type: 'identifier', value: 'a' },
+          { type: 'identifier', value: 'b' }
+        ]
+      }
+    }],
+
+    ['a ~ b', {
+      type: 'binary-operation',
+      value: {
+        op: 'mutate',
+        args: [
+          { type: 'identifier', value: 'a' },
+          { type: 'identifier', value: 'b' }
+        ]
+      }
+    }],
+
     ['a.b = c'],
     ['foo ~ bar'],
     ['foo~bar'],
