@@ -14,6 +14,6 @@ module.exports = parser.type('returnStatement', parser.transform(
     semicolon
   ),
   function(res) {
-    return res[2];
+    return res[2].value;
   }
 ));

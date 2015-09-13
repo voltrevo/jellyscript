@@ -18,15 +18,20 @@ module.exports = function() {
         parser.optional(argumentList),
         parser.optionalWhitespace,
         parser.or(
-          parser.type('expressionBody', parser.transform(
+          parser.transform(
             parser.sequence(
               arrow,
               parser.optionalWhitespace,
               expression
             ),
-            function(res) { return res[2]; }
-          )),
-          parser.type('blockBody', functionBlock)
+            function(res) {
+              return [{
+                type: 'returnStatement',
+                value: res[2].value
+              }];
+            }
+          ),
+          functionBlock
         )
       ),
       function(res) {
