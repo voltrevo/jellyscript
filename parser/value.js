@@ -15,8 +15,8 @@ module.exports = parser.or(
   array,
   boolean,
   function_,
-  identifier,
   nil,
+  identifier,
   number,
   object,
   string

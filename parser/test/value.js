@@ -5,12 +5,26 @@ var generator = require('./generator.js');
 
 generator('value', value, {
   valid: [
-    ['true'],
-    // TODO: ['func => nil'],
-    ['foobar'],
-    ['nil'],
-    ['42'],
-    ['"bluey"']
+    ['true', { type: 'boolean', value: true }],
+
+    ['func => nil', {
+      type: 'function',
+      value: {
+        args: [],
+        body: [{
+          type: 'returnStatement',
+          value: {
+            type: 'nil',
+            value: 'nil'
+          }
+        }]
+      }
+    }],
+
+    ['foobar', { type: 'identifier', value: 'foobar' }],
+    ['nil', { type: 'nil', value: 'nil' }],
+    ['42', { type: 'number', value: 42 }],
+    ['"bluey"', { type: 'string', value: 'bluey' }]
   ],
   invalid: [
     [''],
