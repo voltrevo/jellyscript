@@ -1,0 +1,36 @@
+math = import("math");
+test = import("test");
+
+newton = func(f, df, start, tol, maxIter) {
+  x = start;
+  iter = 0;
+
+  for {
+    last = x;
+    x -~ f(x) / df(x);
+    iter++;
+
+    if (math.abs(last - x) < tol) {
+      return x;
+    } else if (iter >= maxIter) {
+      return nil;
+    }
+  }
+
+  assert(false);
+  return nil;
+};
+
+test(func {
+  aboutSqrt2 = newton(
+    func(x) => x * x - 2,
+    func(x) => 2 * x,
+    2,
+    1e-10,
+    100
+  );
+
+  return math.abs(aboutSqrt2 - math.sqrt(2)) < 1e-8;
+});
+
+return newton;

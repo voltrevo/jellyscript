@@ -1,0 +1,62 @@
+post = import("post");                                                                                                                             
+
+promise = {};
+
+promise.create = func(setup) {
+  p = {}; 
+  
+  resolved = false;
+  value = nil;
+  
+  handlers = [];
+      
+  p.then = func(handler) {
+    if (resolved) {
+      post(func => handler(value));
+    } else {
+      handlers.push(handler);
+    }
+    
+    return p;
+  };
+    
+  setup(func(v) {
+    resolved ~ true;
+    value ~ v;
+      
+    post(func {
+      handlers.each(func(handler) => handler(v));
+      handlers ~ nil;
+      return nil;
+    });
+
+    return nil;
+  });
+    
+  return p; 
+};
+
+promise.all = func(promises) {
+  return promise.create(func(resolve) {
+    value = promises.map(func => nil);
+    promisesRemaining = promises.length();
+    
+    promises.each(func(p, i) {
+      p.then(func(v) {
+        value[i] ~ v;
+      
+        if (--promisesRemaining == 0) {
+          resolve(value);
+        }
+
+        return nil;
+      });
+
+      return nil;
+    });
+
+    return nil;
+  });
+};
+
+return promise;

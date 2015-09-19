@@ -1,0 +1,270 @@
+apply = import("apply");
+promise = import("promise");
+
+mutex = {};
+
+once = func(f, extraCallValue) {
+  called = false;
+
+  return func(args...) {
+    if (!called) {
+      called ~ true;
+      return apply(f, args);
+    }
+
+    return extraCallValue;
+  };
+};
+
+mutex.create = func(resource) {
+  self = {};
+
+  impl = {};
+  self.impl = impl;
+
+  impl.resource = resource;
+  impl.locked = false;
+  impl.lockQueue = [];
+
+  self.isLocked = func() {
+    return impl.locked;
+  };
+
+  impl.unlock = func() {
+    impl.locked ~ false;
+    impl.runQueue();
+  };
+
+  impl.createLock = func() {
+    impl.locked ~ true;
+
+    return {
+      resource: impl.resource,
+      release: once(impl.unlock)
+    };
+  };
+
+  self.tryLock = func => (impl.locked ? nil : impl.createLock());
+
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
+
+    return promise.create(func(resolve, reject) {
+      client = {
+        condition: condition,
+        resolve: resolve,
+        reject: reject
+      };
+
+      if (!impl.locked) {
+        impl.tryClient(client);
+      } else {
+        impl.lockQueue.push(client);
+      }
+    });
+  };
+
+  impl.tryClient = func(client) {
+    impl.locked ~ true;
+    accepted = client.condition();
+    impl.locked ~ false;
+
+    if (accepted) {
+      client.resolve(impl.createLock());
+    } else {
+      client.reject();
+    }
+
+    return accepted;
+  };
+
+  impl.runQueue = func() {
+    accepted = false;
+
+    while (impl.lockQueue.length > 0 && accepted == false) {
+      accepted ~ impl.tryClient(impl.lockQueue.shift());
+    }
+  };
+
+  return self;
+};
+
+mutex.empty = func {
+  self = {};
+
+  impl = {};
+  self.impl = impl;
+
+  impl.createLock = func {
+    return {
+      resource: undefined,
+      release: func {}
+    };
+  };
+
+  self.isLocked = func => false;
+  self.tryLock = func => impl.createLock();
+
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
+
+    return (
+      condition() ?
+      promise.resolve(impl.createLock()) :
+      promise.reject("condition failed")
+    );
+  };
+
+  return self;
+}();
+
+mutex.and = func(mutexes) {
+  self = {};
+
+  impl = {};
+  self.impl = impl;
+
+  impl.mutexes = mutexes;
+  impl.internalLocks = 0;
+
+  self.isLocked = func {
+    return impl.internalLocks == 0 && impl.mutexes.some(func(m) => m.isLocked());
+  };
+
+  impl.combineLocks = func(locks) {
+    return {
+      resource: locks.map(func(lock) => lock.resource),
+      release: func() { locks.each(func(lock) { lock.release(); }) }
+    };
+  };
+
+  impl.createLock = func {
+    return impl.combineLocks(
+      impl.mutexes.map(func(m) => m.tryLock())
+    );
+  };
+
+  self.tryLock = func() {
+    if (self.isLocked()) {
+      return nil;
+    }
+
+    return impl.createLock();
+  };
+
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
+
+    impl.internalLocks++;
+
+    return promise.create(func(resolve, reject) {
+      if (impl.mutexes.length() == 0) {
+        resolve(impl.createLock());
+      }
+
+      currMutexIndex = 0;
+      locks = nil;
+      conditionFailed = false;
+
+      tryCurrMutex = func {
+        currMutex = impl.mutexes[currMutexIndex];
+
+        currMutex.lock(func {
+          if (!impl.mutexes.some(func(m) => m !== currMutex && m.isLocked())) {
+            if (condition()) {
+              locks ~ impl.mutexes.map(func(m) { return m.tryLock() });
+              return true;
+            } else {
+              conditionFailed = true;
+            }
+          }
+
+          return false;
+        }).then(func(lock) {
+          locks[currMutexIndex] ~ lock;
+          resolve(impl.combineLocks(locks));
+        }).catch(func() {
+          if (conditionFailed) {
+            reject("condition failed");
+          } else {
+            currMutexIndex ~ (currMutexIndex + 1) % impl.mutexes.length;
+            tryCurrMutex();
+          }
+        });
+      };
+
+      tryCurrMutex();
+    }).then(func(lock) {
+      impl.internalLocks--;
+      return lock;
+    }).catch(func {
+      impl.internalLocks--;
+    });
+  };
+
+  return self;
+};
+
+mutex.or = func(mutexes) {
+  self = {};
+
+  impl = {};
+  self.impl = impl;
+
+  impl.mutexes = mutexes;
+  impl.internalLocks = 0;
+
+  self.isLocked = func => (
+    impl.internalLocks !== 0 ||
+    impl.mutexes.every(func(m) => m.isLocked())
+  );
+
+  self.tryLock = func {
+    if (impl.internalLocks != 0) {
+      return nil;
+    }
+
+    for (i = 0; i != impl.mutexes.length; i++) {
+      m = impl.mutexes[i];
+
+      if (!m.isLocked()) {
+        return m.tryLock();
+      }
+    }
+
+    return nil;
+  };
+
+  self.lock = func(conditionParam) {
+    condition = conditionParam ?: func => true;
+
+    impl.internalLocks++;
+
+    if (!self.isLocked()) {
+      if (condition()) {
+        impl.internalLocks--;
+        return promise.resolve(self.tryLock());
+      } else {
+        impl.internalLocks--;
+        return promise.reject("condition failed");
+      }
+    }
+
+    conditionOnce ~ once(condition, false);
+
+    return Promise.race(
+      impl.mutexes.map(func(m) {
+        return m.lock(conditionOnce);
+      })
+    ).then(func(lock) {
+      impl.internalLocks--;
+      return lock;
+    }).catch(func() {
+      impl.internalLocks--;
+    });
+  };
+
+  return self;
+};
+
+return mutex;

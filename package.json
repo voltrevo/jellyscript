@@ -1,9 +1,11 @@
 {
   "name": "jellyscript",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A scripting language that's a lot like javascript, but stripped down, much stricter, and with a few tweaks.",
-  "homepage": "https://github.com/voltrevo/jellyscript",
-  "repository": "voltrevo/jellyscript",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/voltrevo/jellyscript.git"
+  },
   "author": {
     "name": "Andrew Morris",
     "email": "voltrevo@gmail.com",
@@ -19,7 +21,14 @@
     "jelly",
     "jellyscript"
   ],
+  "dependencies": {
+    "parser": "git+ssh://git@github.com:voltrevo/parser.git#3ef999997ae01f2a81eadf56ba876d1b472252f3"
+  },
   "devDependencies": {
+    "chai": "^3.2.0",
+    "eslint": "^1.3.1",
+    "eslint-config-voltrevo": "0.0.3",
+    "eslint-plugin-require-path-exists": "^1.0.15",
     "gulp": "^3.6.0",
     "gulp-eslint": "^1.0.0",
     "gulp-exclude-gitignore": "^1.0.0",
@@ -33,5 +42,9 @@
     "prepublish": "gulp prepublish",
     "test": "gulp"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/voltrevo/jellyscript/issues"
+  },
+  "homepage": "https://github.com/voltrevo/jellyscript#readme"
 }

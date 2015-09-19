@@ -1,0 +1,5 @@
+console = import("console");
+
+console.log("Hello world!");
+
+return nil;
