@@ -50,7 +50,7 @@ A complete-ish parser and concept code.
 
 Live here: http://andrewmorris.io/jellyscript
 
-You can see the syntax tree by typing `ast` in the cosole.
+You can see the syntax tree by typing `ast` in the console.
 
 ``` sh
 npm run web-demo
