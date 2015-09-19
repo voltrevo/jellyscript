@@ -1,0 +1,37 @@
+{
+  "name": "jellyscript",
+  "version": "0.0.0",
+  "description": "A scripting language that's a lot like javascript, but stripped down, much stricter, and with a few tweaks.",
+  "homepage": "https://github.com/voltrevo/jellyscript",
+  "repository": "voltrevo/jellyscript",
+  "author": {
+    "name": "Andrew Morris",
+    "email": "voltrevo@gmail.com",
+    "url": "http://andrewmorris.io/"
+  },
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "keywords": [
+    "language",
+    "script",
+    "jelly",
+    "jellyscript"
+  ],
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-istanbul": "^0.9.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-nsp": "^0.4.5",
+    "gulp-coveralls": "^0.1.0"
+  },
+  "scripts": {
+    "prepublish": "gulp prepublish",
+    "test": "gulp"
+  },
+  "license": "MIT"
+}
