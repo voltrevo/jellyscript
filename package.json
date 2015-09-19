@@ -22,7 +22,7 @@
     "jellyscript"
   ],
   "dependencies": {
-    "parser": "git+ssh://git@github.com:voltrevo/parser.git#3ef999997ae01f2a81eadf56ba876d1b472252f3"
+    "parser": "voltrevo/parser#3ef999997ae01f2a81eadf56ba876d1b472252f3"
   },
   "devDependencies": {
     "chai": "^3.2.0",
