@@ -1,4 +1,4 @@
-# Jellyscript [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Code Climate](https://codeclimate.com/github/voltrevo/jellyscript/badges/gpa.svg)](https://codeclimate.com/github/voltrevo/jellyscript) [![Coverage percentage][coveralls-image]][coveralls-url]
+# Jellyscript [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Code Climate](https://codeclimate.com/github/voltrevo/jellyscript/badges/gpa.svg)](https://codeclimate.com/github/voltrevo/jellyscript) [![Coverage Status](https://coveralls.io/repos/voltrevo/jellyscript/badge.svg?branch=master&service=github)](https://coveralls.io/github/voltrevo/jellyscript?branch=master)
 > A scripting language that&#39;s a lot like javascript, but stripped down, much stricter, and with a few tweaks.
 
 ## Status
