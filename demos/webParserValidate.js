@@ -4,7 +4,7 @@
 
 var Stream = require('parser').stream;
 
-var programParser = require('./functionBlock.js');
+var programParser = require('../lib/parser/functionBlock.js');
 
 window.addEventListener('load', function() {
   document.body.style.margin = '0';

@@ -5,7 +5,7 @@
 var fs = require('fs');
 var Stream = require('parser').stream;
 
-var programParser = require('./functionBlock.js');
+var programParser = require('../lib/parser/functionBlock.js');
 
 var fileContents = fs.readFileSync(process.argv[2]).toString();
 var stream = new Stream('{' + fileContents + '}');

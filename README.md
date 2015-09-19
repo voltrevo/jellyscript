@@ -46,6 +46,18 @@ A complete-ish parser and concept code.
 - Strings must be double-quoted.
 - (This list is not complete.)
 
+## Web Demo
+
+Live here: http://andrewmorris.io/jellyscript
+
+You can see the syntax tree by typing `ast` in the cosole.
+
+``` sh
+npm run web-demo
+```
+
+If you'd like to use a different port, append `-- --port <port>`.
+
 
 ## Install
 
