@@ -1,4 +1,5 @@
-# Jellyscript [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Code Climate](https://codeclimate.com/github/voltrevo/jellyscript/badges/gpa.svg)](https://codeclimate.com/github/voltrevo/jellyscript) [![Coverage Status](https://coveralls.io/repos/voltrevo/jellyscript/badge.svg?branch=master&service=github)](https://coveralls.io/github/voltrevo/jellyscript?branch=master)
+# Jellyscript
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Code Climate](https://codeclimate.com/github/voltrevo/jellyscript/badges/gpa.svg)](https://codeclimate.com/github/voltrevo/jellyscript) [![Coverage Status](https://coveralls.io/repos/voltrevo/jellyscript/badge.svg?branch=master&service=github)](https://coveralls.io/github/voltrevo/jellyscript?branch=master)
 > A scripting language that&#39;s a lot like javascript, but stripped down, much stricter, and with a few tweaks.
 
 ## Status
@@ -13,7 +14,7 @@ A complete-ish parser and concept code.
 - `=` means creation, `~` means mutation. This applies to variables, object properties, and array elements. It provides extra protection and eliminates keywords like `var` and `let`.
 - Array elements are added and removed with `pushBack`, `pushFront`, `popBack`, `popFront`. This means they don't get holes per se (they can still contain `nil`s), and you always use `~` to mutate elements, `=` can't be used to add new elements.
 - Arrays have `front` and `back` methods.
-- Statements such as `"use strict";` that have no effect are illegal. Something like `[[compiler.languageFun();]]` should be provided for language extensions.
+- Statements such as `"use strict";` that have no effect are illegal. Something like `[[compiler.useLightningKittens();]]` should be provided for language extensions.
 - Block scoping and if/for scoping. No function scoping.
 - Shadowing variables is illegal.
 - Use `func` instead of `function`.
