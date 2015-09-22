@@ -22,6 +22,7 @@
     "jellyscript"
   ],
   "dependencies": {
+    "brace": "^0.5.1",
     "parser": "voltrevo/parser#3ef999997ae01f2a81eadf56ba876d1b472252f3"
   },
   "devDependencies": {

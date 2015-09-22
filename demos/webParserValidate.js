@@ -2,6 +2,10 @@
 
 /* eslint-disable no-console */
 
+var ace = require('brace');
+require('brace/theme/cobalt');
+require('brace/theme/solarized_dark');
+
 var Stream = require('parser').stream;
 
 var programParser = require('../lib/parser/functionBlock.js');
@@ -9,43 +13,54 @@ var programParser = require('../lib/parser/functionBlock.js');
 window.addEventListener('load', function() {
   document.body.style.margin = '0';
 
-  var ta = document.createElement('textarea');
-  ta.style.width = '100vw';
-  ta.style.height = '100vh';
-  ta.style.padding = '10px';
-  ta.style.fontFamily = 'Courier New';
-  ta.style.fontSize = '1em';
-  ta.style.border = '0';
-  ta.style.resize = 'none';
-  ta.style.outline = 'none';
-  ta.style.boxSizing = 'border-box';
-  ta.style.transition = 'background-color 250ms';
+  var div = document.createElement('div');
+  div.style.width = '100vw';
+  div.style.height = '100vh';
+  div.setAttribute('id', 'editor');
+  div.style.transition = 'background-color 250ms';
+  document.body.appendChild(div);
 
-  document.body.appendChild(ta);
-  ta.focus();
+  window.div = div;
 
-  ta.value = [
+  var editor = ace.edit('editor');
+  editor.setTheme('ace/theme/solarized_dark');
+
+  editor.setOptions({
+    tabSize: 2,
+    softTab: true,
+    printMargin: false,
+    displayIndentGuides: true
+  });
+
+  editor.setValue([
     'console = import("console");',
     '',
     'console.log("Hello world!");',
     '',
     'return nil;'
-  ].join('\n');
+  ].join('\n'));
 
   var check = function() {
     var start = Date.now();
-    var stream = new Stream('{' + ta.value + '}');
+    var stream = new Stream('{' + editor.getValue() + '}');
     var parseResult = programParser(stream);
     var end = Date.now();
 
-    var color = (parseResult.success ? '#dfd' : '#fdd');
-    document.body.style.backgroundColor = color;
-    ta.style.backgroundColor = color;
     console.log('Parse finished in ' + (end - start) + ' ms');
     window.ast = parseResult.value;
+
+    var cssElement = document.querySelector('#ace-solarized-dark');
+    var content = document.querySelector('.ace_content');
+
+    if (!cssElement) {
+      return;
+    }
+
+    content.style.backgroundColor = (parseResult.success ? '#002B36' : '#2B0036');
   };
 
-  ta.addEventListener('input', check);
+  editor.on('change', check);
+  window.editor = editor;
   check();
   console.log('Inspect window.ast to look at the parser output');
 });
