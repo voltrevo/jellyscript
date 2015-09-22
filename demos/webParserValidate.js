@@ -51,12 +51,14 @@ window.addEventListener('load', function() {
 
     var cssElement = document.querySelector('#ace-solarized-dark');
     var content = document.querySelector('.ace_content');
+    var gutter = document.querySelector('.ace_gutter');
 
     if (!cssElement) {
       return;
     }
 
     content.style.backgroundColor = (parseResult.success ? '#002B36' : '#2B0036');
+    gutter.style.backgroundColor = '#000000';
   };
 
   editor.on('change', check);
