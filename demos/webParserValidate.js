@@ -19,6 +19,7 @@ window.addEventListener('load', function() {
   ta.style.resize = 'none';
   ta.style.outline = 'none';
   ta.style.boxSizing = 'border-box';
+  ta.style.transition = 'background-color 250ms';
 
   document.body.appendChild(ta);
   ta.focus();
