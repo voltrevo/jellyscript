@@ -7,7 +7,7 @@ require('brace/theme/cobalt');
 require('brace/theme/solarized_dark');
 
 var parser = require('voltrevo-parser');
-var Stream = parser.flat.Stream;
+var LineStream = parser.flat.LineStream;
 
 window.parser = parser;
 
@@ -45,7 +45,7 @@ window.addEventListener('load', function() {
 
   var check = function() {
     var start = Date.now();
-    var stream = Stream('{' + editor.getValue() + '}');
+    var stream = LineStream('demo.jls', '{' + editor.getValue() + '}');
     var parseResult = programParser.consume(stream);
     var end = Date.now();
 
