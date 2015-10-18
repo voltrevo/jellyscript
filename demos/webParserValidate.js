@@ -6,7 +6,10 @@ var ace = require('brace');
 require('brace/theme/cobalt');
 require('brace/theme/solarized_dark');
 
-var Stream = require('voltrevo-parser').flat.Stream;
+var parser = require('voltrevo-parser');
+var Stream = parser.flat.Stream;
+
+window.parser = parser;
 
 var programParser = require('../lib/parser/functionBlock.js');
 
@@ -43,11 +46,13 @@ window.addEventListener('load', function() {
   var check = function() {
     var start = Date.now();
     var stream = Stream('{' + editor.getValue() + '}');
-    var parseResult = programParser(stream);
+    var parseResult = programParser.consume(stream);
     var end = Date.now();
 
     console.log('Parse finished in ' + (end - start) + ' ms');
     window.ast = parseResult.value;
+    window.res = parseResult;
+    window.stream = stream;
 
     var cssElement = document.querySelector('#ace-solarized-dark');
     var content = document.querySelector('.ace_content');
