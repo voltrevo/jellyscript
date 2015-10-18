@@ -62,7 +62,7 @@ window.addEventListener('load', function() {
       return;
     }
 
-    content.style.backgroundColor = (parseResult.success ? '#002B36' : '#2B0036');
+    content.style.backgroundColor = (parseResult.valid ? '#002B36' : '#2B0036');
     gutter.style.backgroundColor = '#000000';
   };
 

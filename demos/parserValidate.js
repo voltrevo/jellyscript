@@ -12,4 +12,4 @@ var stream = Stream('{' + fileContents + '}');
 
 var parseResult = programParser(stream);
 
-console.log(parseResult.success ? 'valid!' : 'not valid!');
+console.log(parseResult.valid ? 'valid!' : 'not valid!');
