@@ -6,7 +6,7 @@ var ace = require('brace');
 require('brace/theme/cobalt');
 require('brace/theme/solarized_dark');
 
-var Stream = require('parser').stream;
+var Stream = require('voltrevo-parser').flat.Stream;
 
 var programParser = require('../lib/parser/functionBlock.js');
 
@@ -42,7 +42,7 @@ window.addEventListener('load', function() {
 
   var check = function() {
     var start = Date.now();
-    var stream = new Stream('{' + editor.getValue() + '}');
+    var stream = Stream('{' + editor.getValue() + '}');
     var parseResult = programParser(stream);
     var end = Date.now();
 

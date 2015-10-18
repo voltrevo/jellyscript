@@ -3,12 +3,12 @@
 /* eslint-disable no-console */
 
 var fs = require('fs');
-var Stream = require('parser').stream;
+var Stream = require('voltrevo-parser').flat.Stream;
 
 var programParser = require('../lib/parser/functionBlock.js');
 
 var fileContents = fs.readFileSync(process.argv[2]).toString();
-var stream = new Stream('{' + fileContents + '}');
+var stream = Stream('{' + fileContents + '}');
 
 var parseResult = programParser(stream);
 
