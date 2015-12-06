@@ -87,7 +87,7 @@ TODO
 
 ## License
 
-MIT © [Andrew Morris](http://andrewmorris.io/)
+MIT © [Andrew Morris](https://andrewmorris.io/)
 
 
 [npm-image]: https://badge.fury.io/js/jellyscript.svg
